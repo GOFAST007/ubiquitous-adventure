@@ -1,0 +1,35 @@
+[package]
+name = "ruffle_test_framework"
+authors.workspace = true
+edition.workspace = true
+homepage.workspace = true
+license.workspace = true
+repository.workspace = true
+version.workspace = true
+
+[dependencies]
+futures = "0.3.30"
+ruffle_core = { path = "../../core", features = ["deterministic", "timeline_debug", "avm_debug", "audio", "mp3", "default_font"] }
+ruffle_render = { path = "../../render" }
+ruffle_input_format = { path = "../input-format" }
+ruffle_socket_format = { path = "../socket-format" }
+ruffle_video_software = { path = "../../video/software", optional = true }
+image = { version = "0.24.7", default-features = false, features  = ["png"] }
+regex = "1.10.2"
+url = "2.5.0"
+chrono = "0.4.31"
+approx = "0.5.1"
+pretty_assertions = "1.4.0"
+env_logger = "0.10.1"
+tracing = { workspace = true}
+tracing-subscriber = { workspace = true }
+serde = "1.0.193"
+toml = "0.8.8"
+anyhow = "1.0.78"
+async-channel = "2.1.1"
+vfs = "0.10.0"
+percent-encoding = "2.3.1"
+
+[features]
+jpegxr = ["ruffle_core/jpegxr"]
+lzma = ["ruffle_core/lzma"]

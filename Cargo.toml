@@ -1,0 +1,91 @@
+[workspace]
+members = [
+    "core",
+    "core/macros",
+    "core/build_playerglobal",
+    "desktop",
+    "swf",
+    "flv",
+    "web",
+    "web/packages/extension/safari",
+    "wstr",
+    "scanner",
+    "exporter",
+
+    "render",
+    "render/canvas",
+    "render/naga-agal",
+    "render/wgpu",
+    "render/webgl",
+
+    "ruffle_gc_arena",
+
+    "video",
+    "video/software",
+
+    "tests",
+    "tests/input-format",
+    "tests/socket-format",
+    "tests/mocket",
+    "tests/framework",
+]
+default-members = ["desktop"]
+resolver = "2"
+
+[workspace.package]
+authors = ["Ruffle LLC <ruffle@ruffle.rs>"]
+edition = "2021"
+homepage = "https://ruffle.rs"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/ruffle-rs/ruffle"
+version = "0.1.0"
+
+[workspace.dependencies]
+# gc-arena = { git = "https://github.com/kyren/gc-arena", rev = "efd89fc683c6bb456af3e226c33763cb822645e9" }
+tracing = "0.1.40"
+tracing-subscriber = { version = "0.3.18", features = ["env-filter"] }
+naga = { version = "0.14.2", features = ["validate", "wgsl-out"] }
+naga_oil = "0.11.0"
+wgpu = "0.18.0"
+egui = "0.24.1"
+
+# Don't optimize build scripts and macros.
+[profile.release.build-override]
+opt-level = 0
+
+[profile.dev]
+panic = "unwind"
+
+[profile.release]
+panic = "abort"
+
+[profile.dev.package.h263-rs]
+opt-level = 3
+
+[profile.dev.package.h263-rs-yuv]
+opt-level = 3
+
+[profile.dev.package.nihav_core]
+opt-level = 3
+
+[profile.dev.package.nihav_codec_support]
+opt-level = 3
+
+[profile.dev.package.nihav_duck]
+opt-level = 3
+
+# TODO: Set rustflags here instead of in web/core/package.json, when that
+# feature becomes stable. See: https://github.com/rust-lang/cargo/issues/10271
+# Until then, these custom profiles let cargo keep the build cache alive
+# across "dual-wasm" builds, separating it for the two .wasm modules.
+[profile.web-vanilla-wasm]
+inherits = "release"
+
+[profile.web-wasm-extensions]
+inherits = "release"
+
+[patch.crates-io]
+# These are needed because https://github.com/gfx-rs/wgpu/pull/4778
+# is not yet in the latest wgpu release. TODO: Remove when it is.
+wgpu = { git = "https://github.com/gfx-rs/wgpu", branch = "v0.18" }
+naga = { git = "https://github.com/gfx-rs/wgpu", branch = "v0.18" }
